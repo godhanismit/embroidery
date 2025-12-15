@@ -1,17 +1,17 @@
-# Use Java 17 (recommended for Spring Boot)
+# Java 17
 FROM eclipse-temurin:17-jdk
 
-# Set working directory inside container
 WORKDIR /app
 
-# Copy all project files
+# Copy all files
 COPY . .
 
-# Build the Spring Boot application
-RUN mvn clean package -DskipTests
+# Give execute permission to mvnw
+RUN chmod +x mvnw
 
-# Expose default Spring Boot port
+# Build using Maven Wrapper
+RUN ./mvnw clean package -DskipTests
+
 EXPOSE 8080
 
-# Run the generated jar
 CMD ["sh", "-c", "java -jar target/*.jar"]
