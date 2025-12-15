@@ -6,7 +6,7 @@ import autoTable from "jspdf-autotable";
 export default function FilterChalan() {
   const [list, setList] = useState([]);
   const [filters, setFilters] = useState({
-    color: "",
+    colorCode: "",
     shopName: "",
     millName: "",
     status: "", // added status filter
@@ -14,7 +14,7 @@ export default function FilterChalan() {
 
   useEffect(() => {
     load();
-  }, []);
+  }, [filters]);
 
   const load = async () => {
     const res = await API.post("/chalans/filter", filters);
@@ -30,7 +30,7 @@ export default function FilterChalan() {
   };
 
   const resetFilter = () => {
-    setFilters({ color: "", shopName: "", millName: "", status: "" });
+    setFilters({ colorCode: "", shopName: "", millName: "", status: "" });
     load();
   };
 
@@ -78,8 +78,8 @@ export default function FilterChalan() {
           <input
             className="p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
             placeholder="Filter by Color"
-            name="color"
-            value={filters.color}
+            name="colorCode"
+            value={filters.colorCode}
             onChange={handleChange}
           />
 
