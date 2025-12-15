@@ -110,7 +110,7 @@ export default function FilterChalan() {
             <option value="CREATED">CREATED</option>
             <option value="AT_MILL">AT_MILL</option>
             <option value="AT_BORDER_CUTTING">AT_BORDER_CUTTING</option>
-            <option value="COMPLETED">COMPLETED</option>
+            <option value="RETURNED_TO_MAIN_SHOP">AT_MAIN_SHOP</option>
           </select>
         </div>
 
