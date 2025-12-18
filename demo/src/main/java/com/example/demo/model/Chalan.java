@@ -1,15 +1,20 @@
 package com.example.demo.model;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "chalans")
+@CompoundIndex(name = "user_chalanNo_idx", def = "{'user': 1, 'chalanNo': 1}", unique = true)
 public class Chalan {
     @Id
     private String id;
     private String chalanNo;
+    private String clothType;
+    private List<Bunch> bunches;
     private LocalDate date;
     private double rate;
     private double meter;           // initial meter
@@ -18,6 +23,23 @@ public class Chalan {
     private String colorCode;
     private String shopName;        // used in border cutting
     private Status status;
+    private User user;
+
+    public List<Bunch> getBunches() {
+        return bunches;
+    }
+
+    public void setBunches(List<Bunch> bunches) {
+        this.bunches = bunches;
+    }
+
+    public String getClothType() {
+        return clothType;
+    }
+
+    public void setClothType(String clothType) {
+        this.clothType = clothType;
+    }
 
     public Chalan() {
         this.id = UUID.randomUUID().toString();
@@ -102,5 +124,13 @@ public class Chalan {
 
     public void setStatus(Status status) {
         this.status = status;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

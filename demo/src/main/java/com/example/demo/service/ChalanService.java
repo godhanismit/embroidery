@@ -6,9 +6,9 @@ import java.util.Optional;
 
 import com.example.demo.model.Chalan;
 import com.example.demo.model.Status;
+import com.example.demo.model.User;
 import com.example.demo.repository.ChalanRepository;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -16,13 +16,13 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class ChalanService {
+
     private final ChalanRepository repo;
-    @Autowired
-    private MongoTemplate mongoTemplate;
+    private final MongoTemplate mongoTemplate;
 
-
-    public ChalanService(ChalanRepository repo) {
+    public ChalanService(ChalanRepository repo, MongoTemplate mongoTemplate) {
         this.repo = repo;
+        this.mongoTemplate = mongoTemplate;
     }
 
     public Chalan create(Chalan chalan) {
@@ -30,36 +30,32 @@ public class ChalanService {
         return repo.save(chalan);
     }
 
-    public Optional<Chalan> findById(String id) {
-        return repo.findById(id);
-    }
-
-    public List<Chalan> findAll() {
-        return repo.findAll();
-    }
-
-    public List<Chalan> findByStatus(Status status) {
-        return repo.findByStatus(status);
-    }
-
     public Chalan save(Chalan c) {
         return repo.save(c);
     }
 
-    public void deleteById(String id) {
-        repo.deleteById(id);
+    public List<Chalan> findAllByUser(User user) {
+        return repo.findByUser(user);
     }
 
-    public List<Chalan> filter(Map<String, String> filters) {
-        Query query = new Query();
+    public List<Chalan> findByStatusAndUser(Status status, User user) {
+        return repo.findByStatusAndUser(status, user);
+    }
 
-        filters.forEach((key, value) -> {
-            if (value != null && !value.isEmpty()) {
-                query.addCriteria(Criteria.where(key).is(value));
+    public Optional<Chalan> findByIdAndUser(String id, User user) {
+        return repo.findByIdAndUser(id, user);
+    }
+
+    public List<Chalan> filter(Map<String, String> filters, User user) {
+        Query q = new Query();
+        q.addCriteria(Criteria.where("user").is(user));
+
+        filters.forEach((k, v) -> {
+            if (v != null && !v.isEmpty()) {
+                q.addCriteria(Criteria.where(k).is(v));
             }
         });
 
-        return mongoTemplate.find(query, Chalan.class);
+        return mongoTemplate.find(q, Chalan.class);
     }
-
 }
